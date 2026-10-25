@@ -1,37 +1,34 @@
-{
 
+<script>
+async function askAI() {
   const question = document.getElementById("question").value.trim();
-
   const reply = document.getElementById("reply");
 
   if (!question) {
-
     reply.textContent = "আগে আপনার প্রশ্ন লিখুন।";
-
     return;
-
   }
 
   reply.textContent = "Salam AI উত্তর তৈরি করছে...";
 
   try {
-
     const response = await fetch("/api/chat", {
-
       method: "POST",
-
       headers: { "Content-Type": "application/json" },
-
       body: JSON.stringify({ question })
-
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-
       throw new Error(data.error || "অনুরোধ ব্যর্থ হয়েছে।");
-
     }
 
-    reply.textContent
+    reply.textContent = data.answer;
+  } catch (error) {
+    reply.textContent = "উত্তর পাওয়া যায়নি: " + error.message;
+  }
+}
+</script>
+</body>
+</html>
