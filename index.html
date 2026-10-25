@@ -1,34 +1,174 @@
 
-<script>
-() {
-  const question = document.getElementById("question").value.trim();
-  const reply = document.getElementById("reply");
-
-  if (!question) {
-    reply.textContent = "আগে আপনার প্রশ্ন লিখুন।";
-    return;
-  }
-
-  reply.textContent = "Salam AI উত্তর তৈরি করছে...";
-
-  try {
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || "অনুরোধ ব্যর্থ হয়েছে।");
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>Salam AI — Your AI Assistant</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0b1120;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
+    header {
+      padding: 18px;
+      border-bottom: 1px solid #263247;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #101827;
+    }
+    .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 20px;
+      background: linear-gradient(135deg,#14b8a6,#6366f1);
+    }
+    h1 { margin: 0; font-size: 20px; }
+    .status { color: #9caec4; font-size: 13px; margin-top: 4px; }
+    main {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .welcome {
+      text-align: center;
+      margin: 45px 0 28px;
+    }
+    .welcome h2 { font-size: 28px; margin-bottom: 8px; }
+    .welcome p { color: #9caec4; line-height: 1.6; }
+    #reply {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+    .message {
+      background: #151f31;
+      border: 1px solid #29364b;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      min-height: 54px;
+    }
+    .composer {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      background: #151f31;
+      border: 1px solid #344156;
+      border-radius: 18px;
+      margin-top: auto;
+    }
+    textarea {
+      flex: 1;
+      min-width: 0;
+      resize: vertical;
+      min-height: 48px;
+      max-height: 160px;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: white;
+      padding: 14px 8px;
+      font: inherit;
+    }
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 0 18px;
+      background: #14b8a6;
+      color: #06221f;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; }
+    footer {
+      text-align: center;
+      color: #7f90a8;
+      font-size: 12px;
+      padding: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">S</div>
+    <div>
+      <h1>Salam AI</h1>
+      <div class="status">Your AI Assistant</div>
+    </div>
+  </header>
 
-    reply.textContent = data.answer;
-  } catch (error) {
-    reply.textContent = "উত্তর পাওয়া যায়নি: " + error.message;
-  }
-}
-</script>
+  <main>
+    <div class="welcome">
+      <h2>আসসালামু আলাইকুম!</h2>
+      <p>আমি Salam AI। কী জানতে চান, লিখে পাঠান।</p>
+    </div>
+
+    <div class="message" id="reply" aria-live="polite">
+      আপনার প্রশ্নের উত্তর এখানে দেখানো হবে।
+    </div>
+
+    <form class="composer" id="chatForm">
+      <textarea id="question" placeholder="আপনার প্রশ্ন লিখুন..." required></textarea>
+      <button id="sendBtn" type="submit">Send</button>
+    </form>
+  </main>
+
+  <footer>Salam AI · AI responses may not always be accurate.</footer>
+
+  <script>
+    const form = document.getElementById("chatForm");
+    const questionBox = document.getElementById("question");
+    const reply = document.getElementById("reply");
+    const sendBtn = document.getElementById("sendBtn");
+
+    form.addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const question = questionBox.value.trim();
+      if (!question) return;
+
+      reply.textContent = "Salam AI উত্তর তৈরি করছে...";
+      sendBtn.disabled = true;
+
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "অনুরোধ ব্যর্থ হয়েছে।");
+        }
+
+        reply.textContent = data.answer || "কোনো উত্তর পাওয়া যায়নি।";
+      } catch (error) {
+        reply.textContent =
+          "উত্তর পাওয়া যায়নি। " + error.message;
+      } finally {
+        sendBtn.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
