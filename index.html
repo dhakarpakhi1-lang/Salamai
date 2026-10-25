@@ -1,3 +1,37 @@
-change
+{
 
-@@ -1,34 +1,54 @@Create index.htmlasync function askAI() {  const question = document    .getElementById("question").value.trim();  const reply = document.getElementById("reply");<!DOCTYPE html>  if (!question) {    reply.textContent = "আগে আপনার প্রশ্ন লিখুন।";    return;  }<html lang="bn">  reply.textContent = "Salam AI উত্তর তৈরি করছে...";<head>  try {    const response = await fetch("/api/chat", {      method: "POST",      headers: {        "Content-Type": "application/json"      },      body: JSON.stringify({ question })    });  <meta charset="UTF-8">    const data = await response.json();  <meta name="viewport" content="width=device-width, initial-scale=1">  <meta name="theme-color" content="#101827">  <title>Salam AI — Your AI Assistant</title>  <style>    * { box-sizing: border-box; }    body {      margin: 0; font-family: -apple-system, BlinkMacSystemFont,      "Segoe UI", sans-serif; background: #0b1120; color: #f8fafc;      min-height: 100vh; display: flex; flex-direction: column;    if (!response.ok) {      throw new Error(data.error || "অনুরোধ ব্যর্থ হয়েছে।");    }    reply.textContent = data.answer;  } catch (error) {    reply.textContent = "দুঃখিত, উত্তর পাওয়া যায়নি: " + error.message;  }}    header {      padding: 18px 20px; border-bottom: 1px solid #263247;      display: flex; align-items: center; gap: 12px;      background: #101827;    }    .logo {      width: 44px; height: 44px; border-radius: 14px;      display: grid; place-items: center; font-weight: 800;      font-size: 20px; background: linear-gradient(135deg,#14b8a6,#6366f1);    }    h1 { margin: 0; font-size: 20px; }    .status { color: #9caec4; font-siz
+  const question = document.getElementById("question").value.trim();
+
+  const reply = document.getElementById("reply");
+
+  if (!question) {
+
+    reply.textContent = "আগে আপনার প্রশ্ন লিখুন।";
+
+    return;
+
+  }
+
+  reply.textContent = "Salam AI উত্তর তৈরি করছে...";
+
+  try {
+
+    const response = await fetch("/api/chat", {
+
+      method: "POST",
+
+      headers: { "Content-Type": "application/json" },
+
+      body: JSON.stringify({ question })
+
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+
+      throw new Error(data.error || "অনুরোধ ব্যর্থ হয়েছে।");
+
+    }
+
+    reply.textContent
