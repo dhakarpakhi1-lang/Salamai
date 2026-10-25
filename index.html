@@ -1,1 +1,95 @@
 
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salam AI</title>
+  <meta name="description" content="Salam AI - Your AI Assistant">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1020;
+      color: #fff;
+      min-height: 100vh;
+    }
+    header {
+      padding: 20px;
+      font-size: 25px;
+      font-weight: bold;
+      color: #75e6c1;
+      border-bottom: 1px solid #293149;
+    }
+    main {
+      max-width: 700px;
+      margin: 55px auto;
+      padding: 22px;
+      text-align: center;
+    }
+    h1 { font-size: 38px; }
+    p { color: #c4ccdd; line-height: 1.8; }
+    textarea {
+      width: 100%;
+      min-height: 130px;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 12px;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 14px;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 10px;
+      background: #75e6c1;
+      color: #0b1020;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #reply {
+      margin-top: 25px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #172036;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <header>Salam AI</header>
+
+  <main>
+    <h1>স্বাগতম Salam AI-তে</h1>
+    <p>আপনার AI সহকারী। বাংলায় প্রশ্ন লিখুন।</p>
+
+    <textarea id="question"
+      placeholder="আপনার প্রশ্ন এখানে লিখুন..."></textarea>
+
+    <br>
+    <button onclick="askAI()">প্রশ্ন পাঠান</button>
+
+    <div id="reply">Salam AI প্রস্তুত!</div>
+  </main>
+
+  <script>
+    function askAI() {
+      const question =
+        document.getElementById("question").value.trim();
+      const reply = document.getElementById("reply");
+
+      if (!question) {
+        reply.textContent = "আগে আপনার প্রশ্ন লিখুন।";
+        return;
+      }
+
+      reply.textContent =
+        "আপনার প্রশ্ন: " + question +
+        "\n\nআসল AI উত্তর চালু করতে API ও সার্ভার সংযোগ প্রয়োজন।";
+    }
+  </script>
+</body>
+</html>
